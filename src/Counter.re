@@ -26,6 +26,12 @@ let clearTimer = timerId =>
   | _ => ()
   };
 
+let isFinished = state =>
+  switch (state.minutes, state.seconds) {
+  | (0, 0) => true
+  | _ => false
+  };
+
 let counterReducer = (action, state) =>
   switch action {
   | Start(timer) => ReasonReact.Update({...state, timerId: Some(timer)})
@@ -39,6 +45,8 @@ let counterReducer = (action, state) =>
       {...state, minutes: 25, seconds: 0},
       (self => self.send(Stop))
     )
+  | Tick when isFinished(state) =>
+    ReasonReact.SideEffects((self => self.send(Stop)))
   | Tick => ReasonReact.Update(calculateTime(state))
   };
 
