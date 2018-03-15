@@ -1,3 +1,5 @@
+[%bs.raw {|require('./Counter.css')|}];
+
 open ReasonReact;
 
 type state = {
@@ -55,29 +57,42 @@ let make = _children => {
   reducer: counterReducer,
   render: self =>
     <div className="counter">
-      <span className="counter__hours">
+      <span className="counter__minutes">
         (ReasonReact.stringToElement(pad(self.state.minutes)))
       </span>
-      <span> (ReasonReact.stringToElement(":")) </span>
-      <span className="counter__minutes">
+      <span className="counter__divider">
+        (ReasonReact.stringToElement(":"))
+      </span>
+      <span className="counter__seconds">
         (ReasonReact.stringToElement(pad(self.state.seconds)))
       </span>
-      <div>
-        <button
-          onClick=(
-            _event =>
-              self.send(
-                Start(Js.Global.setInterval(() => self.send(Tick), 1000))
-              )
-          )>
-          (ReasonReact.stringToElement("Start"))
-        </button>
-        <button onClick=(_event => self.send(Stop))>
-          (ReasonReact.stringToElement("Stop"))
-        </button>
-        <button onClick=(_event => self.send(Reset))>
-          (ReasonReact.stringToElement("Reset"))
-        </button>
+      <div className="counter__actions">
+        <div className="counter__actions--start">
+          <button
+            className="waves-effect waves-light btn-large green"
+            onClick=(
+              _event =>
+                self.send(
+                  Start(Js.Global.setInterval(() => self.send(Tick), 1000))
+                )
+            )>
+            (ReasonReact.stringToElement("Start"))
+          </button>
+        </div>
+        <div className="counter__actions--stop">
+          <button
+            className="waves-effect waves-light btn-large red"
+            onClick=(_event => self.send(Stop))>
+            (ReasonReact.stringToElement("Stop"))
+          </button>
+        </div>
+        <div className="counter__actions--reset">
+          <button
+            className="waves-effect waves-light btn-large orange"
+            onClick=(_event => self.send(Reset))>
+            (ReasonReact.stringToElement("Reset"))
+          </button>
+        </div>
       </div>
     </div>
 };
