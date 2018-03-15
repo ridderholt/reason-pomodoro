@@ -9,6 +9,7 @@ type state = {
 type action =
   | Start(Js.Global.intervalId)
   | Stop
+  | Reset
   | Tick;
 
 let calculateTime = state =>
@@ -30,6 +31,11 @@ let counterReducer = (action, state) =>
     ReasonReact.UpdateWithSideEffects(
       {...state, timerId: None},
       (_self => clearTimer(state.timerId))
+    )
+  | Reset =>
+    ReasonReact.UpdateWithSideEffects(
+      {...state, minutes: 25, seconds: 0},
+      (self => self.send(Stop))
     )
   | Tick => ReasonReact.Update(calculateTime(state))
   };
@@ -68,6 +74,9 @@ let make = _children => {
         </button>
         <button onClick=(_event => self.send(Stop))>
           (ReasonReact.stringToElement("Stop"))
+        </button>
+        <button onClick=(_event => self.send(Reset))>
+          (ReasonReact.stringToElement("Reset"))
         </button>
       </div>
     </div>
